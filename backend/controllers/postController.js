@@ -6,8 +6,8 @@ export default postControllers = {
       const newPostData = {
         caption: req.body.caption,
         image: {
-          public_id: "hjdhf",
-          url:"fndjfjd"
+          public_id: "sampleid",
+          url:"sampleurl"
         },
         owner: req.user._id
       }
