@@ -1,6 +1,6 @@
-import Post from '../models/Post'
+import Post from '../models/Post.js'
 
-export default postControllers = {
+const postControllers = {
   createPost : async (req, res) => {
     try {
       const newPostData = {
@@ -12,17 +12,18 @@ export default postControllers = {
         owner: req.user._id
       }
       const newPost = await Post.create(newPostData)
-
-      res.status(201).json({
+      return res.status(201).json({
         success: true,
         post: newPost
       })
     
    } catch (error) {
-     res.status(500).json({
+     return res.status(500).json({
        success: false,
        message: error.message
       })
    }
   }
 }
+
+export default postControllers
