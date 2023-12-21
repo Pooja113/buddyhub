@@ -1,5 +1,6 @@
+import mongoose from 'mongoose'
 import Post from '../models/Post.js'
-
+import User from '../models/User.js'
 const postControllers = {
   createPost : async (req, res) => {
     try {
@@ -9,12 +10,17 @@ const postControllers = {
           public_id: "sampleid",
           url:"sampleurl"
         },
-        owner: req.user._id
+        owner: req.user
       }
-      const newPost = await Post.create(newPostData)
+      const post = await Post.create(newPostData)
+      await User.findOneAndUpdate({
+        _id: req.user
+      },
+        { $set: { posts: post._id } })
+      
       return res.status(201).json({
         success: true,
-        post: newPost
+        post
       })
     
    } catch (error) {
