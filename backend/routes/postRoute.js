@@ -4,5 +4,8 @@ import postController from '../controllers/postController.js'
 
 const router = express.Router()
 
-router.post('/post/upload', authVerify,  postController.createPost)
+router.post('/post/create', authVerify, postController.createPost)
+router.put('/post/:id', authVerify,  postController.likeDislikePost)
+//router.delete('/post/create', authVerify,  postController.likeDislikePost)
+
 export default router
