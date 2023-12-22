@@ -31,13 +31,31 @@ const postControllers = {
   },
   deletePost : async (req, res) => {
     try {
-      // if (post.owner !== req.user) {
-      //   return res.status(401).json({
-      //     success: false,
-      //     message: "Unauthorized User"
-      //   })
-      // }
-      return res.status(201).json({
+      const post = await Post.findById(req.params.id)
+      if(!post) {
+        return res.status(404).json({
+          success: false,
+          message: "No Post found!"
+        })
+      }
+
+      if (post.owner.toString() !== req.user) {
+        return res.status(401).json({
+          success: false,
+          message: "Unauthorized User"
+        })
+      }
+      const user = await User.findById(req.user)
+      
+      const indexRemoved = user.posts.indexOf(post._id.toString())
+      if (indexRemoved !== -1) {
+        user.posts.splice(indexRemoved, 1)
+        user.save();
+      }
+
+      await Post.deleteOne({_id: req.params.id});
+
+      return res.status(200).json({
         success: true,
         post
       })
@@ -52,7 +70,6 @@ const postControllers = {
   likeDislikePost : async (req, res) => {
     try {
       const post = await Post.findById(req.params.id)
-      console.log("post", post)
       if(!post) {
         return res.status(404).json({
           success: false,
