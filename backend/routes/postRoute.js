@@ -6,6 +6,6 @@ const router = express.Router()
 
 router.post('/post/create', authVerify, postController.createPost)
 router.put('/post/:id', authVerify,  postController.likeDislikePost)
-//router.delete('/post/create', authVerify,  postController.likeDislikePost)
+router.delete('/post/:id', authVerify,  postController.deletePost)
 
 export default router
