@@ -103,6 +103,22 @@ const postControllers = {
        message: error.message
       })
    }
+  },
+  getPostofFollowings : async (req, res) => {
+    try {
+      const user = await User.findById(req.user).populate("followings","posts")
+            
+      return res.status(200).json({
+        success: true,
+        following: user.followings
+      })
+    
+   } catch (error) {
+     return res.status(500).json({
+       success: false,
+       message: error.message
+      })
+   }
   }
 }
 
