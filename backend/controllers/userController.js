@@ -51,7 +51,8 @@ const userController = {
         })
       }
       
-      const checkPassword = user.matchPassword(password)
+      const checkPassword = await user.matchPassword(password)
+      
       if(!checkPassword) {
         return res.status(401).json({
           success: false,
@@ -72,6 +73,41 @@ const userController = {
     }
   },
 
+  logout:  async (req, res) => {
+    return res.status(200).json({
+      success: true,
+      message: "Logged Out !!"
+    })
+  },
+
+  updatePassword: async (req, res) => {
+    try {
+      const { oldPassword, newPassword } = req.body
+      const user = await User.findById(req.user).select("+password")
+      const checkPassword = await user.matchPassword(oldPassword)
+
+      console.log(checkPassword)
+      if(!checkPassword) {
+        return res.status(401).json({
+          success: false,
+          message: "Wrong Password"
+        })
+      }
+
+      user.password = newPassword
+      user.save();
+      return res.status(200).json({
+        success: true,
+        message: "Password Updated!!"
+      })
+    } catch (error) {
+      return res.status(500).json({
+        success: false,
+        message: error.message
+      })
+    }
+  },
+  
   followuser: async (req, res) => {
     try {
       const userFollowed = await User.findById(req.params.id)
