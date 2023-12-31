@@ -6,7 +6,9 @@ const router = express.Router();
 router.post('/user/register', userController.register)
 router.post('/user/login', userController.login)
 router.post('/user/logout', authVerify, userController.logout)
-router.post('/user/update/password', authVerify, userController.updatePassword)
+router.put('/user/update/password', authVerify, userController.updatePassword)
+router.put('/user/update/profile', authVerify, userController.updateProfile)
+
 
 router.get('/user/follow/:id', authVerify ,userController.followuser)
 
