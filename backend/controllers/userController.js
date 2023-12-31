@@ -1,3 +1,4 @@
+import Post from "../models/Post.js";
 import User from "../models/User.js";
 
 
@@ -126,6 +127,45 @@ const userController = {
       return res.status(200).json({
         success: true,
         message: "Profile Updated!!"
+      })
+    } catch (error) {
+      return res.status(500).json({
+        success: false,
+        message: error.message
+      })
+    }
+  },
+
+  myProfile: async (req, res) => {
+    try {
+      const user = await User.findById(req.user).populate ("posts")
+             
+      return res.status(200).json({
+        success: true,
+        user
+      })
+    } catch (error) {
+      return res.status(500).json({
+        success: false,
+        message: error.message
+      })
+    }
+  },
+
+  deleteProfile: async (req, res) => {
+    try {
+      const user = await User.findById(req.user)
+      await Post.deleteMany({ _id: { $in: user.posts } })
+      
+      await User.updateMany(
+        { $or: [{ followings: { $in: [user._id] } }, { followers: { $in: [user._id] } }] },
+        { $pull:  {followings: user._id ,  followers: user._id }}
+      );
+      await User.deleteOne({_id: req.user});
+             
+      return res.status(200).json({
+        success: true,
+        message: "User deleted !"
       })
     } catch (error) {
       return res.status(500).json({
