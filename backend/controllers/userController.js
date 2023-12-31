@@ -83,6 +83,12 @@ const userController = {
   updatePassword: async (req, res) => {
     try {
       const { oldPassword, newPassword } = req.body
+      if(!oldPassword || !newPassword) {
+        return res.status(400).json({
+          success: false,
+          message: "Please provide oldpassword and newpassword"
+        })
+      }
       const user = await User.findById(req.user).select("+password")
       const checkPassword = await user.matchPassword(oldPassword)
 
@@ -95,7 +101,7 @@ const userController = {
       }
 
       user.password = newPassword
-      user.save();
+      await user.save();
       return res.status(200).json({
         success: true,
         message: "Password Updated!!"
@@ -108,6 +114,26 @@ const userController = {
     }
   },
   
+  updateProfile: async (req, res) => {
+    try {
+      const { name, email } = req.body
+      const user = await User.findById(req.user)
+       
+      if(name) user.name = name
+      if(email) user.email = email
+      
+      await user.save();
+      return res.status(200).json({
+        success: true,
+        message: "Profile Updated!!"
+      })
+    } catch (error) {
+      return res.status(500).json({
+        success: false,
+        message: error.message
+      })
+    }
+  },
   followuser: async (req, res) => {
     try {
       const userFollowed = await User.findById(req.params.id)
@@ -127,8 +153,8 @@ const userController = {
         userFollowing.followings.splice(removeFollowing, 1)
         userFollowed.followers.splice(removeFollowed,1)
         
-        userFollowing.save();
-        userFollowed.save();
+        await userFollowing.save();
+        await userFollowed.save();
 
         return res.status(200).json({
           success: true,
@@ -139,8 +165,8 @@ const userController = {
       userFollowing.followings.push(req.params.id)
       userFollowed.followers.push(req.user)
 
-      userFollowing.save();
-      userFollowed.save();
+      await userFollowing.save();
+      await userFollowed.save();
       return res.status(200).json({
         success: true,
         message: "User Followed !!"
