@@ -9,6 +9,10 @@ router.post('/user/logout', authVerify, userController.logout)
 router.put('/user/update/password', authVerify, userController.updatePassword)
 router.put('/user/update/profile', authVerify, userController.updateProfile)
 router.get('/user/profile/me', authVerify, userController.myProfile)
+router.get('/users', authVerify, userController.getAllUsers)
+router.get('/user/:id', authVerify, userController.getUser)
+
+
 router.delete('/user/profile', authVerify, userController.deleteProfile)
 
 

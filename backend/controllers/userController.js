@@ -152,6 +152,37 @@ const userController = {
     }
   },
 
+  getAllUsers: async (req, res) => {
+    try {
+      const user = await User.find({})
+             
+      return res.status(200).json({
+        success: true,
+        user
+      })
+    } catch (error) {
+      return res.status(500).json({
+        success: false,
+        message: error.message
+      })
+    }
+  },
+
+  getUser: async (req, res) => {
+    try {
+      const user = await User.findById(req.params.id).populate("posts")
+             
+      return res.status(200).json({
+        success: true,
+        user
+      })
+    } catch (error) {
+      return res.status(500).json({
+        success: false,
+        message: error.message
+      })
+    }
+  },
   deleteProfile: async (req, res) => {
     try {
       const user = await User.findById(req.user)
