@@ -137,6 +137,37 @@ const postControllers = {
       })
    }
   },
+  addComment : async (req, res) => {
+    try {
+      const post = await Post.findById(req.params.postId)
+      if(!post) {
+        return res.status(404).json({
+          success: false,
+          message: "No post found"
+        })
+      }
+
+      const comment = {
+        comment: req.body.comment,
+        user: req.user
+      }
+
+      post.comments.push(comment)
+      post.save();
+      
+      return res.status(200).json({
+        success: true,
+        message: comment
+      })
+    
+   } catch (error) {
+     return res.status(500).json({
+       success: false,
+       message: error.message
+      })
+   }
+  },
+
   getPostofFollowings : async (req, res) => {
     try {
       const user = await User.findById(req.user).populate("followings","posts")
