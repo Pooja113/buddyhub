@@ -205,6 +205,8 @@ const userController = {
       })
     }
   },
+
+ 
   followuser: async (req, res) => {
     try {
       const userFollowed = await User.findById(req.params.id)

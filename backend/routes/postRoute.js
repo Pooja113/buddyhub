@@ -9,6 +9,8 @@ router.get('/post/:id', authVerify,  postController.likeDislikePost)
 router.delete('/post/:id', authVerify, postController.deletePost)
 router.put('/post/:id', authVerify, postController.updatePost)
 router.post('/post/comment/:postId', authVerify, postController.addComment)
+router.delete('/post/comment/:postId', authVerify, postController.deleteComment)
+
 
 router.get('/posts', authVerify,  postController.getPostofFollowings)
 
