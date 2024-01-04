@@ -68,6 +68,8 @@ const postControllers = {
    }
   },
 
+  
+
   updatePost : async (req, res) => {
     try {
       const post = await Post.findById(req.params.id)
@@ -166,6 +168,32 @@ const postControllers = {
        message: error.message
       })
    }
+  },
+  deleteComment: async (req, res) => {
+    try {
+      const post = await Post.findById(req.params.id)
+      if(!post) {
+        return res.status(400).json({
+          succes: false,
+          message: "Post not found"
+        })
+      }
+    
+      if(post.owner.toString() === req.user) {
+      
+      
+      }
+             
+      return res.status(200).json({
+        success: true,
+        message: "Comment deleted !"
+      })
+    } catch (error) {
+      return res.status(500).json({
+        success: false,
+        message: error.message
+      })
+    }
   },
 
   getPostofFollowings : async (req, res) => {
